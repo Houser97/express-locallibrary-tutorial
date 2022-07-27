@@ -1,4 +1,6 @@
 let Author = require("../models/author");
+let Book = require("../models/book");
+let async = require("async");
 
 // Mostrar lista de todos los autores.
 exports.author_list = function(req, res, next){
@@ -12,8 +14,31 @@ exports.author_list = function(req, res, next){
 }
 
 // Mostrar la página de detalles para un autor específico.
-exports.author_detail = function(req, res){
-    res.send("No implementado: Detalles de autor:" + req.params.id);
+exports.author_detail = function(req, res, next){
+    async.parallel({
+
+        author(callback){
+            Author.findById(req.params.id)
+                  .exec(callback);
+        }, 
+        authors_books(callback){
+            Book.find({'author': req.params.id}, 'title summary')
+                .exec(callback);
+        }
+    }, function(err, results){
+        if(err){return next(err)}
+        if(results.author === null){
+            let err = new Error('Author not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render("author_detail", {
+            title: 'Author Detail',
+            author: results.author,
+            author_books: results.authors_books,
+        })
+    })
+    Author.findById()
 }
 
 // Mostrar formulario de creación de autores con verbo GET.
