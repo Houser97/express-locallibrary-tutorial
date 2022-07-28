@@ -52,9 +52,24 @@
 
                 <form action="" method="POST">
                     <div class="form-group">
-                        <label for="name">Genre:</label>
-                        <input class="form-control" type="text" itemref="name" name="name" placeholder="Fantasy, poetry, etc."
-                        value= <% locals.genre ?  locals.genre : ""  %>>
+                        <label for="first_name">First Name:</label>
+                        <input class="form-control" type="text" id="first_name" name="first_name" placeholder="First name (Christian)" required = true
+                        value= <% locals.author ?  locals.author.first_name : "" %>>
+                    </div>
+                    <div class="form-group">
+                        <label for="family_name">Family Name:</label>
+                        <input class="form-control" type="text" id="family_name" name="family_name" placeholder="Family name (Surname)" required
+                        value= <% locals.author ?  locals.author.family_name : ""  %>>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_of_birth">Date of birth:</label>
+                        <input class="form-control" type="date" id="date_of_birth" name="date_of_birth"
+                        value= <% locals.author ? locals.author.date_of_birth : "" %>>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_of_death">Date of death:</label>
+                        <input class="form-control" type="date" id="date_of_death" name="date_of_death"
+                        value= <% locals.author ? locals.author.date_of_death : "" %>>
                     </div>
                     <button class="btn btn-primary" >Submit</button>
                 </form>
