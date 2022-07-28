@@ -45,9 +45,9 @@ exports.genre_create_get = function(req, res) {
 };
 
 // Handle Genre create on POST.
-exports.genre_create_post = function(req, res, next) {
+exports.genre_create_post = [
     // Paso 1. Sanitizar y validar el campo de nombre.
-    body('name', 'Genre name required').trim().isLength({min: 1}).escape();
+    body('name', 'Genre name required').trim().isLength({min: 1}).escape(),
     // Paso 2. Procesar solicitud.
     (req, res, next) => {
         //Paso 2.1. Atrapar errores
@@ -67,23 +67,22 @@ exports.genre_create_post = function(req, res, next) {
         } else {
             //Los datos son válidos
             //Paso 2.4. Comprobar que el objeto creado no exista ya.
-            Genre.findOne({name: req.body.name}).exec(function(err, found_genre){
+            Genre.findOne({name: req.body.name}).exec((err, found_genre) => {
                 if(err){return next(err)}
-            })
-
-            if(found_genre){
-                res.redirect(found_genre.url);
-            } else {
-                //EN caso de que no exista el género, se guarda la instancia.
-                genre.save((err) => {
-                    if(err){return next(err)}
-                }) 
-                // Una vez que se guardó, se redirecciona al usuario al género creado.
-                res.redirect(genre.url);
-            }
+                if(found_genre){
+                    res.redirect(found_genre.url);
+                } else {
+                    //EN caso de que no exista el género, se guarda la instancia.
+                    genre.save((err) => {
+                        if(err){return next(err)}
+                        // Una vez que se guardó, se redirecciona al usuario al género creado.
+                        res.redirect(genre.url);
+                    });
+                }
+            });
         }
-    }
-};
+    },
+];
 
 // Display Genre delete form on GET.
 exports.genre_delete_get = function(req, res) {
