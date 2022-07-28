@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+let { DateTime } = require("luxon");
 
 let Schema = mongoose.Schema;
 
@@ -16,5 +17,14 @@ BookSchema
     .get(function(){
         return '/catalog/book/' + this._id;
     });
+
+BookSchema
+    .virtual('due_back_formatted')
+    .get(function(){
+        return this.due_back ?
+        DateTime.fromJSDate(this.due_back).toLocaleString(DateTime.DATE_MED)
+        :
+        "";
+    })
 
 module.exports = mongoose.model('Book', BookSchema);
