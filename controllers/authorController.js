@@ -89,13 +89,56 @@ exports.author_create_post = [
 ];
 
 // Mostrar formulario para eliminar autor con GET
-exports.author_delete_get = function(req, res){
-    res.send("No implementado: Eliminar autor con GET");
+exports.author_delete_get = function(req, res, next){
+    async.parallel({
+        author(callback){
+            Author.findById(req.params.id).exec(callback);
+        },
+        books(callback){
+            Book.find({"author": req.params.id}).exec(callback);
+        }
+    }, function(err, results){
+        if(err){return next(err)}
+        if(results.author === null){
+            res.redirect("/catalog/authors")
+        }
+        res.render("author_delete", {
+            title: "Delete Author",
+            author: results.author,
+            author_books: results.books,
+        })
+    })
 }
 
 // Handle Author delete on POST.
-exports.author_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Author delete POST');
+exports.author_delete_post = function(req, res, next) {
+    async.parallel({
+        //Se usa BODY porque la información viene de un formulario, no de una petición HTTP y el URL.
+        author(callback){
+            Author.findById(req.body.authorid).exec(callback);
+        },
+        author_books(callback){
+            Book.find({"author": req.body.authorid}).exec(callback);
+        }
+    }, function(err, results){
+        if(err) { return next(err) }
+        // Comprobar que no existan libros referenciados al autor
+        if(results.author_books.length > 0){
+            //Si hay libros referenciados, entonces se renderiza de igual manera que con GET
+            res.render("author_delete", {
+                title: "Delete AUthor",
+                author: results.author,
+                author_books: results.author_books,
+            })
+            return;
+        } else {
+            //EL author no tiene libros, por lo que se borra
+            Author.findByIdAndRemove(req.body.authorid, function deleteAuthor(err){
+                if(err) { return next(err) }
+                res.redirect("/catalog/authors")
+            })
+        }
+    })
 };
 
 // Display Author update form on GET.
