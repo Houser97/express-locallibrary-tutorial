@@ -58,7 +58,7 @@
                     </div>
                     <div class="form-group">
                         <label for="author">Author:</label>
-                        <select class="form-control" type="text" id="author" name="autho" placeholder="Select author" required>
+                        <select class="form-control" type="text" id="author" name="author" placeholder="Select author" required>
                             <% authors.sort(function(a,b) { %>
                                 let textA = a.family_name.toUpperCase();
                                 let textB = b.family_name.toUpperCase();
@@ -66,8 +66,8 @@
                             <% })  %>
                             <% authors.forEach(author => { %>
                                 <% if(locals.book) { %>
-                                    <option selected = <% author._id.toString() === locals.book.author._id.toString() ? 'selected' : false %> value = <%- author.id %> >
-                                        <%- autor.name %>
+                                    <option selected = <%- author._id.toString() === book.author._id.toString() || author._id.toString() === locals.book.author ? 'selected' : false %> value = <%- author._id %> >
+                                        <%- author.name %>
                                     </option>
                                 <% } else {%>
                                     <option value= <%- author.id %>> <%- author.name %> </option>

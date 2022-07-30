@@ -48,7 +48,7 @@
                 </ul>
             </div>
             <div class="col-sm-10">
-                <h1><%= book.name %></h1>
+                <h1><%= book.title %></h1>
 
                 <p>
                     <strong>Author:</strong>
@@ -105,6 +105,10 @@
                     <p>There are no copies of this book in the library.</p>
                 <% } %>
                 </div>
+                <hr>
+                <p>
+                    <a href=<%= `${book.url}/update`%>>Update Book</a>
+                </p>
             </div>
         </div>
     </div>
