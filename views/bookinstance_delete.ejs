@@ -48,41 +48,20 @@
                 </ul>
             </div>
             <div class="col-sm-10">
-                <h1> ID: <%= bookinstance._id %></h1>
-                <p>
-                    <strong>Title:</strong>
-                    <a href= <%= bookinstance.book.url %>>
-                        <%= bookinstance.book.title %>
-                    </a>
+                <h1><%= title %>: <%= book_instance.book.title %> </h1>
+                <p><strong>Id:</strong> 
+                   <%= book_instance.id %>
                 </p>
-                <p>
-                    <strong>Imprint:</strong>
-                    <%= bookinstance.book.title %>
-                </p>
-                <p>
-                    <strong>Status:</strong>
-                    <% if(bookinstance.status === 'Available') { %>
-                        <span class="text-success"><%= bookinstance.status %></span>
-                    <% } else if(bookinstance.status === 'Maintenance') { %>
-                        <span class="text-danger"><%= bookinstance.status %></span>
-                    <% } else { %>
-                        <span class="text-warning"><%= bookinstance.status %></span>
-                    <% } %>
-
-                    <% if(bookinstance.status !== "Available" ) { %>
-                        <p>
-                            <strong>Due back:</strong>
-                            <%= bookinstance.due_back_formatted %>
-                        </p>
-                    <% } %>
-                </p>
-                <hr>
-                <p>
-                    <a href=<%= `${bookinstance.url}/update`%>>Update BookInstance</a>
-                </p>
-                <p>
-                    <a href=<%= `${bookinstance.url}/delete`%>>Delete BookInstance</a>
-                </p>
+                <p><strong>Status: </strong><%= book_instance.status %></p>
+                <% if(book_instance.status !== "Available") {%>
+                    <p><strong>Due back: </strong><%= book_instance.due_back_formatted %></p>
+                <% } %>
+                <p>Do you really want to delete this BookInstance?</p>
+                <form action="" method="POST">
+                    <input class="form-control" type="hidden" name="book_instance_id" required value=<%= book_instance._id %>>
+                    <button class="btn btn-primary">Delete</button>
+                    
+                </form>  
             </div>
         </div>
     </div>
