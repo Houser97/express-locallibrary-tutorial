@@ -2,7 +2,9 @@ let Author = require("../models/author");
 let Book = require("../models/book");
 let Genre = require("../models/genre");
 let async = require("async");
-const { body, validationResult } = require('express-validator')
+const { body, validationResult } = require('express-validator');
+
+let debug = require("debug")("author");
 
 // Mostrar lista de todos los autores.
 exports.author_list = function(req, res, next){
@@ -144,12 +146,16 @@ exports.author_delete_post = function(req, res, next) {
 
 // Display Author update form on GET.
 exports.author_update_get = function(req, res, next) {
+    req.sanitize("id").escape().trim();
     async.parallel({
         author(callback){
             Author.findById(req.params.id).exec(callback);
         },
     }, function(err, results){
-        if(err){return next(err)}
+        if(err){
+            debug("update error:" + err);
+            return next(err);
+        }
         if(results.author === null){
             let err = new Error('Author not found.');
             err.status = 404;

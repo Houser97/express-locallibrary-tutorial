@@ -9,6 +9,9 @@ var usersRouter = require('./routes/users');
 let coolRouter = require('./routes/cool');
 let catalogRouter = require('./routes/catalog');
 
+let compression = require("compression");
+let helmet = require("helmet");
+
 var app = express();
 
 let mongoose = require("mongoose");
@@ -21,6 +24,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error'))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(helmet());
+app.use(compression()); //Comprime todas las rutas
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
