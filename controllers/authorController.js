@@ -146,7 +146,6 @@ exports.author_delete_post = function(req, res, next) {
 
 // Display Author update form on GET.
 exports.author_update_get = function(req, res, next) {
-    req.sanitize("id").escape().trim();
     async.parallel({
         author(callback){
             Author.findById(req.params.id).exec(callback);
