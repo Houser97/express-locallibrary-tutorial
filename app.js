@@ -15,7 +15,8 @@ let helmet = require("helmet");
 var app = express();
 
 let mongoose = require("mongoose");
-let mongoDB = 'mongodb+srv://Arturo:Houser97@cluster0.wafhkls.mongodb.net/local_library?retryWrites=true&w=majority'
+let dev_db_url = 'mongodb+srv://Arturo:Houser97@cluster0.wafhkls.mongodb.net/local_library?retryWrites=true&w=majority'
+let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'))
@@ -32,7 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', catalogRouter);
 app.use('/users', usersRouter);
 app.use('/users/cool', coolRouter);
 app.use('/catalog', catalogRouter);
