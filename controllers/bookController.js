@@ -97,7 +97,7 @@ exports.book_create_post = [
             if(typeof req.body.genre === 'undefined'){
                 req.body.genre = []
             } else {
-                req.body.genre = [...req.body.genre];
+                req.body.genre = [req.body.genre];
             }
         }
         next();
